@@ -9,15 +9,13 @@ function DashboardContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [isPro, setIsPro] = useState(false)
+const upgraded = searchParams.get("upgraded") === "true"
 
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push("/login")
-    }
-    if (searchParams.get("upgraded") === "true") {
-      setIsPro(true)
-    }
-  }, [status, router, searchParams])
+useEffect(() => {
+  if (status === "unauthenticated") {
+    router.push("/login")
+  }
+}, [status, router])
 
   if (status === "loading") {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>
@@ -38,7 +36,7 @@ function DashboardContent() {
         </div>
 
         <div className="bg-white rounded-lg shadow p-6">
-          {isPro ? (
+          {upgraded ? (
             <>
               <h2 className="text-xl font-bold mb-2 text-green-600">Pro Plan ✓</h2>
               <p className="text-gray-600">You have full access to all features. Welcome to Pro!</p>
@@ -46,7 +44,7 @@ function DashboardContent() {
           ) : (
             <>
               <h2 className="text-xl font-bold mb-2">Free Plan</h2>
-              <p className="text-gray-600 mb-4">You're on the free plan. Upgrade to Pro to unlock everything.</p>
+              <p className="text-gray-600 mb-4">You&apos;re on the free plan. Upgrade to Pro to unlock everything.</p>
               <button
                 onClick={async () => {
                   const res = await fetch("/api/checkout", { method: "POST" })
